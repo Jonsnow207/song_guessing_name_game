@@ -110,10 +110,13 @@
             transform: scale(0.95);
         }
 
-        .play-icon {
+        .play-icon, .pause-icon {
             width: 0;
             height: 0;
             border-style: solid;
+        }
+
+        .play-icon {
             border-width: 12px 0 12px 20px;
             border-color: transparent transparent transparent white;
             margin-left: 4px;
@@ -123,7 +126,6 @@
             width: 20px;
             height: 24px;
             position: relative;
-            border: none;
         }
 
         .pause-icon::before,
@@ -183,7 +185,6 @@
             height: 100%;
             background: rgba(232, 178, 152, 0.3);
             transition: width 0.1s linear;
-            pointer-events: none;
         }
 
         .time-info {
@@ -282,12 +283,12 @@
 
         const songs = [
             { id: 1, name: "Con Cò - Tùng Dương", file: "songs/Song1_ConCo_TungDuong_cut.mp3" },
-            { id: 2, name: "Trống Vắng - Phương Thanh", file: "songs/Song2_TrongVang_PhuongThanh_cut.mp3" },
-            { id: 3, name: "Đôi Mắt - Wanbi", file: "songs/Song3_DoiMat_Wanbi_cut.mp3" },
-            { id: 4, name: "Kiếp Ve Sầu - Đan Trường", file: "songs/Song4_KiepVeSau_DanTruong_cut.mp3" },
-            { id: 5, name: "Mộng Thủy Tinh - Khánh Ngọc", file: "songs/Song5_MongThuyTinh_KhanhNgoc_cut.mp3" },
-            { id: 6, name: "Thu Cuối - YanBi", file: "songs/Song6_ThuCuoi_YanBi_cut.mp3" },
-            { id: 7, name: "Tan - Tuấn Hưng", file: "songs/Song7_Tan_TuanHung_cut.mp3" }
+            { id: 2, name: "Trống Vắng - Phương Thanh", file: "songs/Song2_TrongVang_PhuongThanh.mp3" },
+            { id: 3, name: "Đôi Mắt - Wanbi", file: "songs/Song3_DoiMat_Wanbi.mp3" },
+            { id: 4, name: "Kiếp Ve Sầu - Đan Trường", file: "songs/Song4_KiepVeSau_DanTruong.mp3" },
+            { id: 5, name: "Mộng Thủy Tinh - Khánh Ngọc", file: "songs/Song5_MongThuyTinh_KhanhNgoc.mp3" },
+            { id: 6, name: "Thu Cuối - YanBi", file: "songs/Song6_ThuCuoi_YanBi.mp3" },
+            { id: 7, name: "Tan - Tuấn Hưng", file: "songs/Song7_Tan_TuanHung.mp3" }
         ];
 
 
@@ -357,11 +358,6 @@
                     const clamped = Math.min(1, Math.max(0, ratio));
                     audio.currentTime = clamped * audio.duration;
                     updateProgress(song.id);
-                    if (audioContext && audioContext.state === 'suspended') {
-                        audioContext.resume();
-                    }
-                    audio.play();
-                    document.getElementById(`icon-${song.id}`).className = 'pause-icon';
                 });
             }
 
