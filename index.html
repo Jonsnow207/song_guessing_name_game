@@ -11,6 +11,10 @@
             box-sizing: border-box;
         }
 
+        *, *::before, *::after {
+            font-family: inherit;
+        }
+
         :root {
             --sage: #9EABA2;
             --mist: #BDD1C5;
@@ -22,12 +26,172 @@
             --ink: #4b3b38;
         }
 
+        @import url("https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&family=Bebas+Neue&display=swap");
+
+        #home-layer {
+            min-height: 100vh;
+            color: #ffffff;
+            background: radial-gradient(1200px 700px at 20% 20%, var(--clay) 0%, var(--peach) 50%, var(--sage) 100%);
+            overflow: hidden;
+            display: block;
+        }
+
+        #home-layer.hidden {
+            display: none;
+        }
+
+        #game-layer.hidden {
+            display: none;
+        }
+
+        #game-layer {
+            position: relative;
+        }
+
+        #game-layer,
+        #game-layer:fullscreen {
+            min-height: 100vh;
+            background: linear-gradient(165deg, var(--clay) 0%, var(--peach) 45%, var(--sage) 100%);
+        }
+
+        #home-layer .page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            isolation: isolate;
+            font-family: "Barlow", "Segoe UI", Tahoma, sans-serif;
+            border-radius: 26px;
+            overflow: hidden;
+            box-shadow: 0 22px 50px rgba(75, 59, 56, 0.28);
+            transform: perspective(1400px) rotateX(2deg) rotateY(-2deg);
+            transform-origin: center;
+            transition: transform 200ms ease, box-shadow 200ms ease;
+        }
+
+        #home-layer .page:hover {
+            transform: perspective(1400px) rotateX(0deg) rotateY(0deg);
+            box-shadow: 0 28px 60px rgba(75, 59, 56, 0.32);
+        }
+
+        #home-layer .bubble {
+            position: absolute;
+            border-radius: 999px;
+            background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.18), rgba(255,255,255,.04) 55%, rgba(0,0,0,.03) 100%);
+            filter: blur(.2px);
+            z-index: -1;
+        }
+        #home-layer .b1{width:420px;height:420px;left:-120px;top:110px;opacity:.55}
+        #home-layer .b2{width:190px;height:190px;right:120px;top:40px;opacity:.35}
+        #home-layer .b3{width:230px;height:230px;right:90px;bottom:220px;opacity:.45}
+        #home-layer .b4{width:120px;height:120px;left:55%;top:18px;opacity:.25}
+
+        #home-layer main {
+            flex: 1;
+            display: grid;
+            place-items: center;
+            padding: clamp(18px, 4vw, 48px) clamp(14px, 3vw, 40px);
+            text-align: center;
+        }
+
+        #home-layer .hero {
+            width: min(980px, 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+        }
+
+        #home-layer .title {
+            margin: 0;
+            line-height: 1.08;
+            font-family: "Bebas Neue", "Barlow", sans-serif;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: clamp(30px, 5.8vw, 76px);
+            text-shadow: 0 12px 28px rgba(0,0,0,.12);
+            white-space: nowrap;
+        }
+
+        #home-layer .actions {
+            margin-top: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            width: min(86vw, 560px);
+        }
+
+        #home-layer .cta {
+            border: 0;
+            padding: 14px 24px;
+            border-radius: 999px;
+            font-weight: 800;
+            cursor: pointer;
+            color: #fff;
+            background: var(--clay);
+            width: 100%;
+            font-size: clamp(14px, 2.2vw, 20px);
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            box-shadow: 0 18px 40px rgba(75,59,56,.25);
+        }
+        #home-layer .cta:focus-visible{outline:3px solid rgba(255,255,255,.6); outline-offset:3px}
+
+        #home-layer .eq-wrap{
+            padding: 0 clamp(14px, 3vw, 40px) 18px;
+            margin-top: auto;
+        }
+
+        #home-layer .equalizer{
+            height: clamp(140px, 24vw, 360px);
+            width:100%;
+            display:flex;
+            align-items:flex-end;
+            gap:8px;
+            padding: 10px 0 0;
+        }
+
+        #home-layer .bar{
+            flex:1 1 0;
+            min-width:6px;
+            height:100%;
+            border-radius:12px;
+            transform-origin:bottom;
+            transform: scaleY(var(--h, .4));
+            transition: transform 420ms ease;
+            background: linear-gradient(180deg, var(--butter) 0%, var(--butter) 58%, var(--card) 58%, var(--card) 100%);
+            box-shadow: 0 12px 22px rgba(75,59,56,.12);
+        }
+
+        #home-layer footer{
+            padding: 10px clamp(18px, 4vw, 56px) 18px;
+            display:flex;
+            justify-content:center;
+            opacity:.9;
+            font-size:13px;
+            letter-spacing:.3px;
+        }
+
+        @media (max-width:560px){
+            #home-layer .title { letter-spacing: 2px; }
+            #home-layer .equalizer{height: clamp(120px, 38vw, 220px); gap:6px}
+        }
+
         body {
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
             background: linear-gradient(165deg, var(--clay) 0%, var(--peach) 45%, var(--sage) 100%);
             min-height: 100vh;
             padding: 20px;
             color: var(--ink);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        button, input, textarea, select {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
 
         .container {
@@ -48,6 +212,7 @@
             position: relative;
             overflow: hidden;
             min-height: 700px;
+            width: 100%;
         }
 
         .song-card {
@@ -60,6 +225,7 @@
             height: 500px;
             position: relative;
             width: 100%;
+            will-change: transform;
         }
 
         .song-card:hover {
@@ -320,6 +486,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
 
         .reveal-modal-title {
@@ -327,6 +494,11 @@
             color: var(--clay);
             margin-bottom: 40px;
             font-weight: 700;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+            line-height: 1.2;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .reveal-modal-answer {
@@ -337,6 +509,13 @@
             background: rgba(238, 204, 140, 0.3);
             border-radius: 12px;
             border-left: 5px solid var(--clay);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+            line-height: 1.2;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .reveal-modal-hint {
@@ -344,6 +523,28 @@
             font-size: 2em;
             color: rgba(75, 59, 56, 0.7);
             font-style: italic;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+            line-height: 1.3;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        @media (max-width: 900px) {
+            .reveal-modal-card {
+                width: 90vw;
+                max-width: 800px;
+                padding: 30px 40px;
+            }
+            .reveal-modal-title {
+                font-size: 2em;
+            }
+            .reveal-modal-answer {
+                font-size: 3em;
+            }
+            .reveal-modal-hint {
+                font-size: 1.2em;
+            }
         }
 
         @keyframes fadeIn {
@@ -462,28 +663,215 @@
                 right: 10px;
             }
         }
+
+        .layer2-actions {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 20;
+        }
+
+        .home-btn,
+        .fullscreen-btn {
+            border: none;
+            border-radius: 999px;
+            padding: 10px 16px;
+            background: var(--clay);
+            color: #fff;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            cursor: pointer;
+            box-shadow: 0 10px 24px rgba(75, 59, 56, 0.25);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .home-btn:hover,
+        .fullscreen-btn:hover {
+            background: #8f5654;
+        }
+
+        .home-btn:focus-visible,
+        .fullscreen-btn:focus-visible {
+            outline: 3px solid rgba(255,255,255,.6);
+            outline-offset: 3px;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🎵 Song Guessing Game 🎵</h1>
-        
-        <div class="instructions">
-            <h2>How to Play:</h2>
-            <p>Technician: Click play to start the song. Players try to guess the name. Pause when someone guesses correctly and click "Reveal Answer" to show the song name!</p>
+    <div id="home-layer">
+        <div class="page">
+            <div class="bubble b1" aria-hidden="true"></div>
+            <div class="bubble b2" aria-hidden="true"></div>
+            <div class="bubble b3" aria-hidden="true"></div>
+            <div class="bubble b4" aria-hidden="true"></div>
+
+            <main>
+                <section class="hero" aria-label="Hero section">
+                    <h1 class="title">🎵 SONG GUESSING NAME 🎵</h1>
+                    <div class="actions" role="group" aria-label="Primary actions">
+                        <button class="cta" id="start-btn" type="button">Start</button>
+                    </div>
+                </section>
+            </main>
+
+            <div class="eq-wrap" aria-hidden="true">
+                <div class="equalizer" id="equalizer"></div>
+            </div>
+
+            <footer>
+                © <span id="year"></span> Song Guessing Game • All rights reserved
+            </footer>
         </div>
+    </div>
 
-        <button class="rail-nav left" id="rail-prev" type="button" aria-label="Previous song">
-            <span class="rail-icon">‹</span>
-        </button>
-        <button class="rail-nav right" id="rail-next" type="button" aria-label="Next song">
-            <span class="rail-icon">›</span>
-        </button>
+    <div id="game-layer" class="hidden">
+        <div class="layer2-actions" aria-label="Layer 2 actions">
+            <button class="home-btn" id="home-btn" type="button" aria-label="Return to home">
+                HOME
+            </button>
+            <button class="fullscreen-btn" id="fullscreen-btn" type="button" aria-label="Toggle full screen">
+                FULL SCREEN
+            </button>
+        </div>
+        <div class="container">
+            <h1>🎵 Song Guessing Game 🎵</h1>
+            
+            <div class="instructions">
+                <h2>How to Play:</h2>
+                <p>Technician: Click play to start the song. Players try to guess the name. Pause when someone guesses correctly and click "Reveal Answer" to show the song name!</p>
+            </div>
 
-        <div id="songs-container"></div>
+            <button class="rail-nav left" id="rail-prev" type="button" aria-label="Previous song">
+                <span class="rail-icon">‹</span>
+            </button>
+            <button class="rail-nav right" id="rail-next" type="button" aria-label="Next song">
+                <span class="rail-icon">›</span>
+            </button>
+
+            <div id="songs-container"></div>
+        </div>
     </div>
 
     <script>
+        let waveTimer = null;
+        const bars = [];
+
+        function startWave() {
+            if (!bars.length) {
+                const eq = document.getElementById("equalizer");
+                const BAR_COUNT = 52;
+                for (let i = 0; i < BAR_COUNT; i++) {
+                    const b = document.createElement("div");
+                    b.className = "bar";
+                    b.style.setProperty("--h", (Math.random() * 0.8 + 0.2).toFixed(2));
+                    eq.appendChild(b);
+                    bars.push(b);
+                }
+            }
+
+            if (waveTimer) {
+                clearInterval(waveTimer);
+            }
+
+            function tick(){
+                for (const b of bars){
+                    const h = (Math.random() * 0.85 + 0.15).toFixed(2);
+                    b.style.setProperty("--h", h);
+                }
+            }
+            tick();
+            waveTimer = setInterval(tick, 520);
+        }
+
+        function stopWave() {
+            if (waveTimer) {
+                clearInterval(waveTimer);
+                waveTimer = null;
+            }
+        }
+
+        function refreshCurrentWaveform() {
+            const song = songs[currentIndex];
+            if (!song) return;
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    renderWaveform(song).catch((err) => {
+                        console.warn('Waveform refresh failed for song', song.id, err);
+                    });
+                });
+            });
+        }
+
+        (function initHomeLayer() {
+            const eq = document.getElementById("equalizer");
+            if (!eq) return;
+            startWave();
+
+            const startBtn = document.getElementById("start-btn");
+            startBtn.addEventListener("click", async () => {
+                stopWave();
+                document.getElementById("home-layer").classList.add("hidden");
+                document.getElementById("game-layer").classList.remove("hidden");
+                renderCurrentSong(true);
+                refreshCurrentWaveform();
+                const layer = document.getElementById("game-layer");
+                if (layer && !document.fullscreenElement) {
+                    try {
+                        await layer.requestFullscreen();
+                    } catch (err) {
+                        console.warn("Fullscreen request failed", err);
+                    }
+                }
+            });
+
+            document.getElementById("year").textContent = new Date().getFullYear();
+        })();
+
+        const homeBtn = document.getElementById("home-btn");
+        const fullscreenBtn = document.getElementById("fullscreen-btn");
+
+        function updateFullscreenLabel() {
+            if (!fullscreenBtn) return;
+            const isFullscreen = Boolean(document.fullscreenElement);
+            fullscreenBtn.textContent = isFullscreen ? "EXIT FULL" : "FULL SCREEN";
+        }
+
+        homeBtn.addEventListener("click", () => {
+            stopAllAudio();
+            document.getElementById("game-layer").classList.add("hidden");
+            document.getElementById("home-layer").classList.remove("hidden");
+            startWave();
+        });
+
+        if (fullscreenBtn) {
+            fullscreenBtn.addEventListener("click", async () => {
+                const layer = document.getElementById("game-layer");
+                if (!layer) return;
+
+                if (!document.fullscreenElement) {
+                    try {
+                        await layer.requestFullscreen();
+                    } catch (err) {
+                        console.warn("Fullscreen request failed", err);
+                    }
+                } else {
+                    try {
+                        await document.exitFullscreen();
+                    } catch (err) {
+                        console.warn("Exit fullscreen failed", err);
+                    }
+                }
+            });
+        }
+
+        document.addEventListener("fullscreenchange", updateFullscreenLabel);
+        updateFullscreenLabel();
+
         // Add your songs here - replace with actual MP3 file paths
 
         const songs = [
@@ -827,8 +1215,9 @@
                 </div>
             `;
 
-            // Add to body
-            document.body.appendChild(overlay);
+            // Add to fullscreen element if active so it shows in fullscreen mode
+            const fullscreenTarget = document.fullscreenElement || document.body;
+            fullscreenTarget.appendChild(overlay);
 
             // Close function
             function closeModal() {
