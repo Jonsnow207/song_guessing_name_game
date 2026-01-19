@@ -44,6 +44,12 @@
             letter-spacing: 0.2px;
         }
 
+        #songs-container {
+            position: relative;
+            overflow: hidden;
+            min-height: 700px;
+        }
+
         .song-card {
             background: var(--card);
             border-radius: 15px;
@@ -51,10 +57,73 @@
             margin-bottom: 20px;
             box-shadow: 0 10px 30px rgba(75, 59, 56, 0.25);
             transition: transform 0.3s ease;
+            height: 500px;
+            position: relative;
+            width: 100%;
         }
 
         .song-card:hover {
             transform: translateY(-5px);
+        }
+
+        @keyframes slide-out-left {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+        }
+
+        @keyframes slide-out-right {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        @keyframes slide-in-left {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slide-in-right {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .song-card.slide-out-left {
+            animation: slide-out-left 0.4s ease-in-out forwards;
+        }
+
+        .song-card.slide-out-right {
+            animation: slide-out-right 0.4s ease-in-out forwards;
+        }
+
+        .song-card.slide-in-left {
+            animation: slide-in-left 0.4s ease-in-out forwards;
+        }
+
+        .song-card.slide-in-right {
+            animation: slide-in-right 0.4s ease-in-out forwards;
         }
 
         .song-top {
@@ -65,10 +134,18 @@
             margin-bottom: 8px;
         }
 
+        .reveal-button-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
         .waveform-stack {
             display: flex;
             flex-direction: column;
             gap: 6px;
+            margin-top: 15px;
         }
 
         @media (max-width: 720px) {
@@ -76,8 +153,9 @@
                 grid-template-columns: 60px 1fr;
             }
 
-            .waveform-stack {
+            .reveal-button-container {
                 grid-column: 1 / -1;
+                justify-content: flex-start;
             }
         }
 
@@ -162,7 +240,7 @@
 
         .waveform-container {
             position: relative;
-            height: 140px;
+            height: 320px;
             background: rgba(255, 255, 255, 0.7);
             border-radius: 8px;
             overflow: hidden;
@@ -182,14 +260,16 @@
             left: 0;
             height: 100%;
             background: rgba(232, 178, 152, 0.3);
-            transition: width 0.1s linear;
+            transition: width 0.1s linear, left 0.1s linear;
             pointer-events: none;
         }
 
         .time-info {
             display: flex;
             justify-content: space-between;
-            font-size: 0.85em;
+            font-size: 2em;
+            font-style: italic;
+            font-weight: bold;
             color: rgba(42, 26, 35, 0.7);
             margin-top: 10px;
         }
@@ -198,10 +278,10 @@
             background: var(--clay);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 10px 10px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 0.9em;
+            font-size: 1em;
             font-weight: 600;
             transition: all 0.3s ease;
         }
@@ -211,57 +291,176 @@
             transform: translateY(-2px);
         }
 
-        .reveal-row {
+        .reveal-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-top: 10px;
-            flex-wrap: wrap;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
         }
 
-        .song-name {
-            padding: 8px 12px;
-            background: rgba(238, 204, 140, 0.35);
-            border-left: 4px solid var(--clay);
-            border-radius: 8px;
+        .reveal-modal-card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 40px 50px;
+            box-shadow: 0 20px 60px rgba(75, 59, 56, 0.4);
+            width: 800px;
+            height: 500px;
+            text-align: center;
+            animation: slideUp 0.4s ease;
+            border: 3px solid var(--clay);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .reveal-modal-title {
+            font-size: 3em;
+            color: var(--clay);
+            margin-bottom: 40px;
+            font-weight: 700;
+        }
+
+        .reveal-modal-answer {
+            font-size: 5em;
             color: var(--ink);
             font-weight: 600;
-            display: none;
+            padding: 20px;
+            background: rgba(238, 204, 140, 0.3);
+            border-radius: 12px;
+            border-left: 5px solid var(--clay);
         }
 
-        .song-name.revealed {
-            display: inline-flex;
-            animation: fadeIn 0.5s ease;
+        .reveal-modal-hint {
+            margin-top: 20px;
+            font-size: 2em;
+            color: rgba(75, 59, 56, 0.7);
+            font-style: italic;
         }
 
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(-10px);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
             }
         }
 
         .instructions {
-            background: rgba(255, 255, 255, 0.92);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(75, 59, 56, 0.2);
+            background: transparent;
+            border-radius: 0;
+            padding: 0;
+            margin-bottom: 18px;
+            box-shadow: none;
         }
 
         .instructions h2 {
-            color: var(--clay);
-            margin-bottom: 10px;
+            color: white;
+            margin-bottom: 8px;
             font-size: 1.3em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.25);
         }
 
         .instructions p {
-            color: #555;
+            color: rgba(255,255,255,0.95);
             line-height: 1.6;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .rail-nav {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 50;
+            width: clamp(84px, 10vw, 160px);
+            height: clamp(84px, 10vw, 160px);
+            border-radius: clamp(18px, 2.6vw, 34px);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            backdrop-filter: none;
+            box-shadow: none;
+            transition: transform 0.15s ease, opacity 0.2s ease;
+        }
+
+        .rail-nav:hover {
+            transform: translateY(-50%) scale(1.04);
+        }
+
+        .rail-nav:active {
+            transform: translateY(-50%) scale(0.98);
+        }
+
+        .rail-nav:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        .rail-nav.left {
+            left: 16px;
+        }
+
+        .rail-nav.right {
+            right: 16px;
+        }
+
+        .rail-icon {
+            font-size: clamp(120px, 12vw, 240px);
+            line-height: 1;
+            font-weight: 900;
+            color: var(--clay);
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.15s ease, color 0.15s ease, text-shadow 0.2s ease, filter 0.2s ease;
+            text-shadow: 0 12px 30px rgba(75, 59, 56, 0.22);
+            filter: drop-shadow(0 10px 18px rgba(75, 59, 56, 0.18));
+        }
+
+        .rail-nav:hover .rail-icon {
+            color: #8f5654;
+            transform: scale(1.5);
+            text-shadow: 0 14px 36px rgba(75, 59, 56, 0.28);
+            filter: drop-shadow(0 12px 22px rgba(75, 59, 56, 0.22));
+        }
+
+        .rail-nav:active .rail-icon {
+            transform: scale(0.98);
+        }
+
+        @media (max-width: 720px) {
+            .rail-nav.left {
+                left: 10px;
+            }
+            .rail-nav.right {
+                right: 10px;
+            }
         }
     </style>
 </head>
@@ -273,6 +472,13 @@
             <h2>How to Play:</h2>
             <p>Technician: Click play to start the song. Players try to guess the name. Pause when someone guesses correctly and click "Reveal Answer" to show the song name!</p>
         </div>
+
+        <button class="rail-nav left" id="rail-prev" type="button" aria-label="Previous song">
+            <span class="rail-icon">‹</span>
+        </button>
+        <button class="rail-nav right" id="rail-next" type="button" aria-label="Next song">
+            <span class="rail-icon">›</span>
+        </button>
 
         <div id="songs-container"></div>
     </div>
@@ -293,10 +499,72 @@
 
         const container = document.getElementById('songs-container');
         const audioElements = {};
+        const revealState = {};
+        let currentIndex = 0;
+        let navigationDirection = 'right'; // 'left' or 'right'
 
-        songs.forEach(song => {
+        const railPrevBtn = document.getElementById('rail-prev');
+        const railNextBtn = document.getElementById('rail-next');
+
+        function stopAllAudio() {
+            Object.keys(audioElements).forEach(id => {
+                const a = audioElements[id];
+                if (a && !a.paused) {
+                    a.pause();
+                }
+            });
+        }
+
+        function setCurrentIndex(nextIndex) {
+            const clamped = Math.min(songs.length - 1, Math.max(0, nextIndex));
+            if (clamped === currentIndex) return;
+            
+            // Determine navigation direction
+            navigationDirection = clamped > currentIndex ? 'right' : 'left';
+            
+            stopAllAudio();
+            
+            // Get current card if it exists
+            const currentCard = container.querySelector('.song-card');
+            
+            if (currentCard) {
+                // Apply slide-out animation
+                const slideOutClass = navigationDirection === 'right' ? 'slide-out-left' : 'slide-out-right';
+                currentCard.classList.add(slideOutClass);
+                
+                // Wait for animation to complete, then render new song
+                setTimeout(() => {
+                    currentIndex = clamped;
+                    renderCurrentSong();
+                }, 400); // Match animation duration
+            } else {
+                // No current card, render immediately
+                currentIndex = clamped;
+                renderCurrentSong();
+            }
+        }
+
+        function updateNav() {
+            const isAtStart = currentIndex === 0;
+            const isAtEnd = currentIndex === songs.length - 1;
+            railPrevBtn.disabled = isAtStart;
+            railNextBtn.disabled = isAtEnd;
+        }
+
+        function renderCurrentSong(skipAnimation = false) {
+            const song = songs[currentIndex];
+
+            // Reset container to show only one song card at a time
+            container.innerHTML = '';
+
             const card = document.createElement('div');
-            card.className = 'song-card';
+            // Apply slide-in animation based on navigation direction (skip on initial render)
+            if (skipAnimation) {
+                card.className = 'song-card';
+            } else {
+                const slideInClass = navigationDirection === 'right' ? 'slide-in-right' : 'slide-in-left';
+                card.className = `song-card ${slideInClass}`;
+            }
             card.innerHTML = `
                 <div class="song-top">
                     <button class="play-button" onclick="togglePlay(${song.id})">
@@ -306,44 +574,40 @@
                         <div class="song-number">Song #${song.id}</div>
                         <div class="song-placeholder">Mystery Song ${song.id}</div>
                     </div>
-                    <div class="waveform-stack">
-                        <div class="waveform-container">
-                            <div class="progress-bar" id="progress-${song.id}"></div>
-                            <canvas class="waveform" id="waveform-${song.id}"></canvas>
-                        </div>
-                        <div class="time-info">
-                            <span id="current-${song.id}">0:00</span>
-                            <span id="duration-${song.id}">0:00</span>
-                        </div>
+                    <div class="reveal-button-container">
+                        <button class="reveal-button" onclick="revealSong(${song.id})" id="reveal-${song.id}">🎯 Reveal Answer</button>
                     </div>
                 </div>
-                <div class="reveal-row">
-                    <button class="reveal-button" onclick="revealSong(${song.id})" id="reveal-${song.id}">🎯 Reveal Answer</button>
-                    <div class="song-name" id="name-${song.id}">
-                        ✓ ${song.name}
+                <div class="waveform-stack">
+                    <div class="waveform-container">
+                        <div class="progress-bar" id="progress-${song.id}"></div>
+                        <canvas class="waveform" id="waveform-${song.id}"></canvas>
+                    </div>
+                    <div class="time-info">
+                        <span id="current-${song.id}">0:00</span>
+                        <span id="duration-${song.id}">0:00</span>
                     </div>
                 </div>
                 <audio id="audio-${song.id}" src="${song.file}"></audio>
             `;
             container.appendChild(card);
 
-            // Draw waveform from audio data
-            requestAnimationFrame(() => {
-                renderWaveform(song).catch((err) => {
-                    console.warn('Waveform render failed for song', song.id, err);
-                });
-            });
-
-            // Setup audio element
+            // Setup audio element for current card (single-song view)
             const audio = document.getElementById(`audio-${song.id}`);
             audioElements[song.id] = audio;
 
             audio.addEventListener('loadedmetadata', () => {
-                document.getElementById(`duration-${song.id}`).textContent = formatTime(audio.duration);
+                const durationEl = document.getElementById(`duration-${song.id}`);
+                if (durationEl) durationEl.textContent = formatTime(audio.duration);
             });
 
             audio.addEventListener('timeupdate', () => {
                 updateProgress(song.id);
+            });
+
+            audio.addEventListener('ended', () => {
+                const icon = document.getElementById(`icon-${song.id}`);
+                if (icon) icon.className = 'play-icon';
             });
 
             const canvas = document.getElementById(`waveform-${song.id}`);
@@ -353,7 +617,28 @@
                         return;
                     }
                     const rect = canvas.getBoundingClientRect();
-                    const ratio = (event.clientX - rect.left) / rect.width;
+                    const clickX = event.clientX - rect.left;
+                    
+                    // Map click to waveform area if waveform layout info exists
+                    let ratio;
+                    if (canvas.waveformStartX !== undefined && canvas.waveformWidth !== undefined) {
+                        const waveformStartX = canvas.waveformStartX;
+                        const waveformWidth = canvas.waveformWidth;
+                        
+                        // Check if click is within waveform area
+                        if (clickX < waveformStartX) {
+                            ratio = 0; // Before waveform starts
+                        } else if (clickX > waveformStartX + waveformWidth) {
+                            ratio = 1; // After waveform ends
+                        } else {
+                            // Map click position to waveform area (0 to 1)
+                            ratio = (clickX - waveformStartX) / waveformWidth;
+                        }
+                    } else {
+                        // Fallback to full canvas width if waveform not rendered yet
+                        ratio = clickX / rect.width;
+                    }
+                    
                     const clamped = Math.min(1, Math.max(0, ratio));
                     audio.currentTime = clamped * audio.duration;
                     updateProgress(song.id);
@@ -361,15 +646,26 @@
                         audioContext.resume();
                     }
                     audio.play();
-                    document.getElementById(`icon-${song.id}`).className = 'pause-icon';
+                    const icon = document.getElementById(`icon-${song.id}`);
+                    if (icon) icon.className = 'pause-icon';
                 });
             }
 
-            audio.addEventListener('ended', () => {
-                const icon = document.getElementById(`icon-${song.id}`);
-                icon.className = 'play-icon';
+            // Button always shows "Reveal Answer" since we use modal now
+            const button = document.getElementById(`reveal-${song.id}`);
+            if (button) {
+                button.textContent = '🎯 Reveal Answer';
+            }
+
+            // Draw waveform from audio data
+            requestAnimationFrame(() => {
+                renderWaveform(song).catch((err) => {
+                    console.warn('Waveform render failed for song', song.id, err);
+                });
             });
-        });
+
+            updateNav();
+        }
 
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         let lastCongratsAt = 0;
@@ -399,9 +695,11 @@
         }
 
         function buildPeaks(data, width) {
-            const step = Math.max(1, Math.floor(data.length / width));
-            const peaks = new Array(width);
-            for (let i = 0; i < width; i++) {
+            // Create fewer peaks for rectangular boxes (adjust divisor for bar count)
+            const barCount = Math.floor(width / 4); // Adjust this to control number of bars
+            const step = Math.max(1, Math.floor(data.length / barCount));
+            const peaks = new Array(barCount);
+            for (let i = 0; i < barCount; i++) {
                 let min = 1.0;
                 let max = -1.0;
                 const start = i * step;
@@ -431,13 +729,25 @@
             ctx.clearRect(0, 0, width, height);
             ctx.fillStyle = '#A36361';
             const mid = height / 2;
-            const barWidth = 2;
-            for (let x = 0; x < peaks.length; x += barWidth) {
-                const peak = peaks[x];
-                const y1 = mid + peak.min * mid;
-                const y2 = mid + peak.max * mid;
-                const barHeight = Math.max(1, y2 - y1);
-                ctx.fillRect(x, y1, barWidth, barHeight);
+            const barWidth = 3; // Mini width for each rectangle box
+            const barSpacing = 2; // Small spacing between boxes
+            const totalBarWidth = barWidth + barSpacing;
+            const totalWidth = peaks.length * totalBarWidth;
+            const startX = (width - totalWidth) / 2; // Center the waveform
+            
+            // Store waveform layout info on canvas for progress/click alignment
+            canvas.waveformStartX = startX;
+            canvas.waveformWidth = totalWidth;
+            canvas.waveformBarCount = peaks.length;
+            canvas.waveformTotalBarWidth = totalBarWidth;
+            
+            for (let i = 0; i < peaks.length; i++) {
+                const peak = peaks[i];
+                const x = startX + (i * totalBarWidth);
+                const amplitude = Math.max(peak.max, -peak.min);
+                const barHeight = Math.max(2, amplitude * height * 0.9); // Bar height based on amplitude
+                const y = mid - (barHeight / 2);
+                ctx.fillRect(x, y, barWidth, barHeight);
             }
         }
 
@@ -446,14 +756,38 @@
             if (!audio || !isFinite(audio.duration) || audio.duration <= 0) {
                 return;
             }
-            const progress = (audio.currentTime / audio.duration) * 100;
-            document.getElementById(`progress-${songId}`).style.width = progress + '%';
+            const canvas = document.getElementById(`waveform-${songId}`);
+            const progressBar = document.getElementById(`progress-${songId}`);
+            const progress = audio.currentTime / audio.duration;
+            
+            // If waveform layout info exists, align progress with waveform area
+            if (canvas && canvas.waveformStartX !== undefined && progressBar) {
+                const container = canvas.parentElement;
+                const containerWidth = container.clientWidth;
+                const waveformStartX = canvas.waveformStartX;
+                const waveformWidth = canvas.waveformWidth;
+                
+                // Calculate progress bar position and width based on waveform area
+                const progressBarLeft = waveformStartX;
+                const progressBarWidth = waveformWidth * progress;
+                
+                progressBar.style.left = progressBarLeft + 'px';
+                progressBar.style.width = progressBarWidth + 'px';
+            } else {
+                // Fallback to full width if waveform not rendered yet
+                progressBar.style.width = (progress * 100) + '%';
+                progressBar.style.left = '0';
+            }
+            
             document.getElementById(`current-${songId}`).textContent = formatTime(audio.currentTime);
         }
 
         function togglePlay(songId) {
             const audio = audioElements[songId];
             const icon = document.getElementById(`icon-${songId}`);
+            if (!audio) {
+                return;
+            }
 
             // Pause all other songs
             Object.keys(audioElements).forEach(id => {
@@ -476,15 +810,48 @@
         }
 
         function revealSong(songId) {
-            const nameElement = document.getElementById(`name-${songId}`);
-            const button = document.getElementById(`reveal-${songId}`);
-            const isRevealed = nameElement.classList.toggle('revealed');
-            if (button) {
-                button.textContent = isRevealed ? '🙈 Hide Answer' : '🎯 Reveal Answer';
+            const song = songs.find(s => s.id === songId);
+            if (!song) return;
+
+            // Play congrats sound
+            playCongratsSound();
+
+            // Create modal overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'reveal-modal-overlay';
+            overlay.innerHTML = `
+                <div class="reveal-modal-card">
+                    <div class="reveal-modal-title">🎯 Answer Revealed!</div>
+                    <div class="reveal-modal-answer">${song.name}</div>
+                    <div class="reveal-modal-hint">Click anywhere or press any key to close</div>
+                </div>
+            `;
+
+            // Add to body
+            document.body.appendChild(overlay);
+
+            // Close function
+            function closeModal() {
+                overlay.style.animation = 'fadeIn 0.3s ease reverse';
+                setTimeout(() => {
+                    if (overlay.parentNode) {
+                        overlay.parentNode.removeChild(overlay);
+                    }
+                }, 300);
             }
-            if (isRevealed) {
-                playCongratsSound();
-            }
+
+            // Close on click anywhere
+            overlay.addEventListener('click', closeModal);
+
+            // Close on any keyboard key
+            const keyboardHandler = (e) => {
+                closeModal();
+                document.removeEventListener('keydown', keyboardHandler);
+            };
+            document.addEventListener('keydown', keyboardHandler);
+
+            // Mark as revealed
+            revealState[songId] = true;
         }
 
         function playCongratsSound() {
@@ -529,6 +896,18 @@
             const secs = Math.floor(seconds % 60);
             return `${mins}:${secs.toString().padStart(2, '0')}`;
         }
+
+        // Navigation wiring + keyboard shortcuts
+        railPrevBtn.addEventListener('click', () => setCurrentIndex(currentIndex - 1));
+        railNextBtn.addEventListener('click', () => setCurrentIndex(currentIndex + 1));
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') setCurrentIndex(currentIndex - 1);
+            if (e.key === 'ArrowRight') setCurrentIndex(currentIndex + 1);
+        });
+
+        // Initial render (single-song view)
+        renderCurrentSong(true);
     </script>
 </body>
 </html>
